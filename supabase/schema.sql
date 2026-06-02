@@ -1,0 +1,13 @@
+-- ============================================================
+-- DEPRECATED — do not run this file directly.
+--
+-- The canonical, ordered setup now lives in supabase/migrations/.
+-- Run them in order (Supabase SQL editor or `supabase db push`):
+--
+--   0001_core_schema.sql     tables + signup trigger + is_admin()
+--   0002_rls_policies.sql    Row Level Security + security hardening
+--   0003_seed.sql            categories + preset templates + fields
+--   0004_promote_admin.sql   backfill profiles + promote your admin
+--
+-- See supabase/README.md for the full setup + end-to-end verification.
+-- ============================================================

@@ -1,0 +1,50 @@
+
+> mayur-electronics@1.0.0 dev
+> next dev
+
+  ▲ Next.js 14.2.21
+  - Local:        http://localhost:3000
+  - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 2.3s
+ ✓ Compiled /src/middleware in 363ms (126 modules)
+ ○ Compiling / ...
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (101kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (231kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+ ✓ Compiled / in 3.4s (734 modules)
+ ✓ Compiled in 425ms (310 modules)
+ GET / 200 in 6034ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 758ms (852 modules)
+ GET /login?redirect=/admin 200 in 977ms
+ GET / 200 in 832ms
+ GET / 200 in 634ms
+ GET / 200 in 425ms
+ GET / 200 in 2220ms
+ ○ Compiling /admin ...
+ ✓ Compiled /admin in 728ms (880 modules)
+ ✓ Compiled /account in 491ms (900 modules)
+ ○ Compiling /admin/categories ...
+ ✓ Compiled /admin/categories in 603ms (945 modules)
+ ○ Compiling /admin/products/new ...
+ ✓ Compiled /admin/products/new in 643ms (1104 modules)
+ ✓ Compiled /admin/templates in 372ms (1119 modules)
+ ✓ Compiled /api/admin/templates in 245ms (624 modules)
+ POST /api/admin/templates 200 in 1858ms
+ ✓ Compiled /admin/products in 440ms (1117 modules)
+ ✓ Compiled /admin/settings in 484ms (1056 modules)
+ ✓ Compiled / in 231ms (634 modules)
+ GET / 200 in 1050ms
+ ✓ Compiled /account in 252ms (648 modules)
+ ○ Compiling /products ...
+ ✓ Compiled /products in 998ms (1176 modules)
+ ○ Compiling /products/[slug] ...
+ ✓ Compiled /products/[slug] in 514ms (1195 modules)
+ ✓ Compiled /cart in 346ms (1207 modules)
+ ✓ Compiled /checkout in 461ms (1235 modules)
+ ✓ Compiled /api/checkout in 361ms (816 modules)
+ POST /api/checkout 200 in 1887ms
+ ✓ Compiled /order-success in 417ms (1361 modules)
+ ○ Compiling /admin/orders ...
+ ✓ Compiled /admin/orders in 532ms (1372 modules)

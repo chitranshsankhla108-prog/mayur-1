@@ -1,0 +1,5 @@
+-- ============================================================
+-- DEPRECATED — seeding now lives in supabase/migrations/0003_seed.sql.
+-- Run the migrations in supabase/migrations/ in order instead.
+-- See supabase/README.md.
+-- ============================================================

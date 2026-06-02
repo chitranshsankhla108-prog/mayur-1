@@ -1,0 +1,206 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /*
+   * Storefront + account run a clean light "premium retail" theme:
+   * off-white backgrounds, white cards, dark readable text, light-gray borders
+   * and crimson reserved for CTAs / prices / active states.
+   */
+  :root {
+    --background: 220 24% 98%;
+    --foreground: 222 30% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 30% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 30% 12%;
+
+    --primary: 350 85% 42%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 16% 95%;
+    --secondary-foreground: 222 30% 12%;
+
+    --muted: 220 16% 96%;
+    --muted-foreground: 220 9% 42%;
+
+    --accent: 220 15% 93%;
+    --accent-foreground: 222 30% 12%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 90%;
+    --input: 220 13% 86%;
+    --ring: 350 85% 50%;
+
+    /* Fill for form controls (input/textarea/select). White on light theme. */
+    --field: 0 0% 100%;
+
+    --radius: 0.75rem;
+  }
+
+  /*
+   * The admin panel shares the same light system. Kept as an explicit scope so
+   * admin-only overrides have a hook, and so admin styling is independent of any
+   * future storefront theme change.
+   */
+  .admin-theme {
+    --background: 220 24% 97%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 350 85% 42%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 16% 95%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 220 16% 95%;
+    --muted-foreground: 220 9% 42%;
+
+    --accent: 220 15% 93%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 90%;
+    --input: 220 13% 86%;
+    --ring: 350 85% 50%;
+
+    --field: 0 0% 100%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    /* Subtle abstract light wash — calm, not glowy. */
+    background-image: radial-gradient(
+        60% 50% at 85% -5%,
+        rgba(200, 16, 46, 0.05) 0%,
+        rgba(200, 16, 46, 0) 60%
+      ),
+      radial-gradient(
+        45% 40% at 0% 0%,
+        rgba(99, 102, 132, 0.06) 0%,
+        rgba(99, 102, 132, 0) 55%
+      );
+    background-attachment: fixed;
+  }
+
+  /* The admin SaaS surface stays flat/neutral — no decorative wash. */
+  .admin-theme {
+    background-image: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-heading {
+    font-family: var(--font-heading), var(--font-sans), sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  ::selection {
+    background-color: rgba(200, 16, 46, 0.18);
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(220 13% 82%);
+    border-radius: 999px;
+    border: 2px solid hsl(var(--background));
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(220 10% 68%);
+  }
+}
+
+@layer components {
+  .container-px {
+    @apply mx-auto w-full max-w-[1280px] px-5 sm:px-6 lg:px-8;
+  }
+
+  .surface {
+    @apply rounded-xl border border-border bg-card;
+  }
+
+  .surface-hover {
+    @apply transition-colors duration-200 hover:border-foreground/20;
+  }
+
+  .red-divider {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(200, 16, 46, 0.55),
+      transparent
+    );
+  }
+
+  /*
+   * Light glassmorphism. Subtle and readable — translucent white with a soft
+   * blur and a light hairline border. Used on major panels (header, hero,
+   * cards, checkout summary, auth card, admin chrome) — never everywhere.
+   */
+  .glass {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04),
+      0 12px 30px -18px rgba(17, 24, 39, 0.18);
+  }
+
+  .glass-header {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+  }
+
+  /* Lighter touch for product/content cards so imagery stays crisp. */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    border: 1px solid rgba(226, 232, 240, 0.85);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

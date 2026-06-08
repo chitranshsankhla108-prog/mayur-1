@@ -11,7 +11,7 @@ const faqs = [
   },
   {
     q: "What payment methods do you accept?",
-    a: "We accept UPI, credit/debit cards, net banking and Razorpay online payments. Cash on Delivery is available on selected products and locations.",
+    a: "We accept UPI, credit/debit cards, net banking and Razorpay online payments — all secured through our payment gateway.",
   },
   {
     q: "How fast is delivery?",

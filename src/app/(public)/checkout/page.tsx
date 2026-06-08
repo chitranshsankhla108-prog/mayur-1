@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   CreditCard,
-  Banknote,
   Smartphone,
   Building2,
   Wallet,
@@ -35,7 +34,6 @@ const paymentMethods: {
   { id: "card", label: "Credit / Debit Card", desc: "Visa, Mastercard, RuPay", icon: CreditCard },
   { id: "netbanking", label: "Net Banking", desc: "All major banks", icon: Building2 },
   { id: "razorpay", label: "Razorpay", desc: "Secure all-in-one gateway", icon: Wallet },
-  { id: "cod", label: "Cash on Delivery", desc: "Pay when you receive", icon: Banknote },
 ];
 
 export default function CheckoutPage() {
@@ -192,7 +190,7 @@ export default function CheckoutPage() {
       if (!res.ok) throw new Error(data.error || "Checkout failed");
 
       // Online payment via the real Razorpay gateway.
-      if (payment !== "cod" && data.razorpay) {
+      if (data.razorpay) {
         const ok = await loadRazorpayScript();
         if (!ok) throw new Error("Could not load payment gateway");
 
@@ -244,15 +242,15 @@ export default function CheckoutPage() {
         return;
       }
 
-      // Online method chosen but gateway not configured → dev-only simulation.
-      if (payment !== "cod" && data.simulate) {
+      // Gateway not configured → dev-only simulation step.
+      if (data.simulate) {
         setSimOrder(data.order);
         setLoading(false);
         return;
       }
 
-      // COD — order is placed; payment is collected on delivery.
-      finalizeOrder(data.order);
+      // No gateway and no simulation flag — nothing to charge against.
+      throw new Error("No payment method is available. Please try again later.");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong");
       setLoading(false);

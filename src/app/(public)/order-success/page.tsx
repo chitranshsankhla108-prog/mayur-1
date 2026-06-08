@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   CheckCircle2,
   Package,
@@ -27,14 +27,35 @@ interface StoredOrder {
 }
 
 function SuccessInner() {
+  const router = useRouter();
   const params = useSearchParams();
   const orderNumber = params.get("order");
   const [order, setOrder] = useState<StoredOrder | null>(null);
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    const raw = sessionStorage.getItem("mayur-last-order");
-    if (raw) setOrder(JSON.parse(raw));
-  }, []);
+    let parsed: StoredOrder | null = null;
+    try {
+      const raw = sessionStorage.getItem("mayur-last-order");
+      if (raw) parsed = JSON.parse(raw) as StoredOrder;
+    } catch {
+      // Corrupted/forged sessionStorage — treat as no order.
+      parsed = null;
+    }
+
+    // Guard against direct/refreshed access: this page is only valid right
+    // after a real checkout, which leaves a matching order in sessionStorage.
+    if (!parsed || (orderNumber && parsed.order_number !== orderNumber)) {
+      router.replace("/products");
+      return;
+    }
+
+    setOrder(parsed);
+    setChecked(true);
+  }, [orderNumber, router]);
+
+  // Don't flash the success UI before the guard has run.
+  if (!checked) return <div className="container-px py-20" />;
 
   return (
     <div className="container-px py-16">

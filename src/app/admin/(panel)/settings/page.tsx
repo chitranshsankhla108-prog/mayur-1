@@ -19,7 +19,6 @@ export default function AdminSettingsPage() {
     address: SITE.address,
     gst_rate: "18",
     free_shipping: true,
-    cod_enabled: true,
   });
 
   function update<K extends keyof typeof form>(key: K, value: (typeof form)[K]) {
@@ -105,20 +104,6 @@ export default function AdminSettingsPage() {
             <Switch
               checked={form.free_shipping}
               onCheckedChange={(v) => update("free_shipping", v)}
-            />
-          </div>
-          <div className="flex items-center justify-between rounded-lg border border-border p-4">
-            <div>
-              <p className="text-sm font-medium text-foreground">
-                Cash on Delivery
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Allow COD at checkout
-              </p>
-            </div>
-            <Switch
-              checked={form.cod_enabled}
-              onCheckedChange={(v) => update("cod_enabled", v)}
             />
           </div>
         </div>

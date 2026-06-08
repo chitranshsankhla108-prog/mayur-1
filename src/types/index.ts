@@ -21,8 +21,7 @@ export type PaymentMethod =
   | "upi"
   | "card"
   | "netbanking"
-  | "razorpay"
-  | "cod";
+  | "razorpay";
 
 export interface Profile {
   id: string;

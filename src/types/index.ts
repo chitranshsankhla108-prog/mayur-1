@@ -151,6 +151,11 @@ export interface OrderItem {
   total_price: number;
   /** Which price tier was charged for this line at checkout time. */
   price_type?: "public" | "dealer" | null;
+  // ---- Product snapshot (captured at checkout — never changes afterwards) ----
+  product_sku?: string | null;
+  product_brand?: string | null;
+  product_category?: string | null;
+  product_image_url?: string | null;
 }
 
 export interface ShippingAddress {
@@ -161,6 +166,8 @@ export interface ShippingAddress {
   city: string;
   state: string;
   postal_code: string;
+  /** Optional customer note left at checkout. */
+  notes?: string;
 }
 
 export interface Order {
@@ -169,16 +176,25 @@ export interface Order {
   order_number: string;
   status: OrderStatus;
   payment_status: PaymentStatus;
-  payment_method: PaymentMethod;
+  payment_method: PaymentMethod | string;
   razorpay_order_id: string | null;
   razorpay_payment_id: string | null;
   subtotal: number;
   gst_amount: number;
   shipping_amount: number;
   total_amount: number;
+  /** Coupon discount applied at checkout (0 when none). */
+  discount_amount?: number;
+  coupon_code?: string | null;
+  delivery_method?: string | null;
+  notes?: string | null;
+  paid_at?: string | null;
   shipping_address: ShippingAddress;
   created_at: string;
+  updated_at?: string | null;
   items?: OrderItem[];
+  /** Joined customer profile (admin views only). */
+  customer?: Profile | null;
 }
 
 // ---- Client-side cart shape (localStorage / zustand) ----

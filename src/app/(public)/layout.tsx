@@ -1,7 +1,5 @@
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { FloatingWhatsApp } from "@/components/shared/whatsapp-button";
-import { WHATSAPP_MESSAGES } from "@/lib/whatsapp";
 import { getCurrentProfile } from "@/lib/auth";
 import { RoleProvider } from "@/components/providers/role-provider";
 
@@ -19,7 +17,6 @@ export default async function PublicLayout({
         <Header isAuthed={!!profile} isAdmin={isAdmin} />
         <main className="flex-1">{children}</main>
         <Footer />
-        <FloatingWhatsApp message={WHATSAPP_MESSAGES.support} />
       </div>
     </RoleProvider>
   );

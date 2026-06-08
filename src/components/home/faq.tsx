@@ -19,7 +19,7 @@ const faqs = [
   },
   {
     q: "Can I get a bulk / B2B quote?",
-    a: "Absolutely. Contact our sales team on WhatsApp for business pricing, GST invoicing and bulk orders.",
+    a: "Absolutely. Call or visit our store and our sales team will help with business pricing, GST invoicing and bulk orders.",
   },
 ];
 

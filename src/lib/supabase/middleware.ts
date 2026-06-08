@@ -43,12 +43,14 @@ export async function updateSession(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isAccount = path.startsWith("/account");
   const isAdmin = path.startsWith("/admin") && path !== "/admin/login";
+  // Checkout is a protected action — an order can only be placed when logged in.
+  const isCheckout = path === "/checkout" || path.startsWith("/checkout/");
 
   // Dev-only diagnostics: set SUPABASE_DEBUG_AUTH=true in .env.local.
   const debug = process.env.SUPABASE_DEBUG_AUTH === "true";
   const log = (msg: string) => debug && console.log(`[auth] ${path} — ${msg}`);
 
-  if ((isAccount || isAdmin) && !user) {
+  if ((isAccount || isAdmin || isCheckout) && !user) {
     log("no session → redirecting to login");
     const url = request.nextUrl.clone();
     url.pathname = "/login";

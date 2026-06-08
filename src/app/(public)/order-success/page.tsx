@@ -6,14 +6,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import {
   CheckCircle2,
   Package,
-  Download,
   ShoppingBag,
-  Headphones,
+  FileText,
   Truck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { WhatsAppLink } from "@/components/shared/whatsapp-button";
-import { WHATSAPP_MESSAGES } from "@/lib/whatsapp";
 import { formatINR } from "@/lib/utils";
 import type { LocalCartItem } from "@/types";
 
@@ -86,6 +83,11 @@ function SuccessInner() {
             business days
           </span>
         </div>
+
+        <p className="mt-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+          <FileText className="h-4 w-4 text-crimson-600" /> Invoices will be sent
+          to your provided number.
+        </p>
       </div>
 
       {order && (
@@ -134,17 +136,11 @@ function SuccessInner() {
             <Package className="h-4 w-4" /> Track Order
           </Link>
         </Button>
-        <Button variant="outline" onClick={() => window.print()}>
-          <Download className="h-4 w-4" /> Download Invoice
-        </Button>
         <Button asChild variant="outline">
           <Link href="/products">
             <ShoppingBag className="h-4 w-4" /> Continue Shopping
           </Link>
         </Button>
-        <WhatsAppLink message={WHATSAPP_MESSAGES.support}>
-          <Headphones className="h-4 w-4" /> Contact Support
-        </WhatsAppLink>
       </div>
     </div>
   );

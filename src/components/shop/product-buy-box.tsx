@@ -6,8 +6,6 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { QuantitySelector } from "@/components/shared/quantity-selector";
 import { WishlistButton } from "@/components/shared/wishlist-button";
-import { WhatsAppLink } from "@/components/shared/whatsapp-button";
-import { WHATSAPP_MESSAGES } from "@/lib/whatsapp";
 import { useCart } from "@/lib/store/cart";
 import { useRole } from "@/components/providers/role-provider";
 import type { Product } from "@/types";
@@ -59,13 +57,6 @@ export function ProductBuyBox({ product }: { product: Product }) {
         </Button>
         <WishlistButton product={product} className="h-12 w-12" />
       </div>
-
-      <WhatsAppLink
-        message={WHATSAPP_MESSAGES.productInquiry(product.title)}
-        className="w-full"
-      >
-        Ask about this product on WhatsApp
-      </WhatsAppLink>
     </div>
   );
 }

@@ -12,6 +12,12 @@ function hasEnv() {
 
 /** Map a place_order() exception into a friendly client response. */
 function orderError(message: string): NextResponse | null {
+  if (message.includes("AUTH_REQUIRED")) {
+    return NextResponse.json(
+      { error: "Please login to continue checkout." },
+      { status: 401 }
+    );
+  }
   if (message.includes("OUT_OF_STOCK")) {
     const name = message.split("OUT_OF_STOCK:")[1]?.trim();
     return NextResponse.json(
@@ -61,6 +67,20 @@ export async function POST(request: Request) {
     // Client-sent unit prices and totals are deliberately ignored.
     // ----------------------------------------------------------------
     const supabase = createClient();
+
+    // Login is REQUIRED before an order can be placed — enforced server-side so
+    // a direct API call without a session can never create an order. (place_order
+    // also raises AUTH_REQUIRED as a second line of defence.)
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json(
+        { error: "Please login to continue checkout." },
+        { status: 401 }
+      );
+    }
+
     const { data: placed, error } = await supabase.rpc("place_order", {
       p_items: items.map((i: { product_id: string; quantity: number }) => ({
         product_id: i.product_id,

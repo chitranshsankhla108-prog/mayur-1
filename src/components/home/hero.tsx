@@ -5,14 +5,13 @@ import {
   Tags,
   Truck,
   BadgeCheck,
-  MessageCircle,
+  Phone,
   Zap,
   BatteryCharging,
   Cctv,
   Sun,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { WHATSAPP_NUMBER } from "@/lib/constants";
 
 const badges = [
   { icon: BadgeCheck, label: "Genuine Products" },
@@ -28,10 +27,6 @@ const domains = [
   { icon: Cctv, label: "CCTV Security", active: false },
   { icon: Sun, label: "Solar", active: false },
 ];
-
-const quoteHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-  "Hello, I need help choosing inverter / battery / CCTV products for my home / business."
-)}`;
 
 export function Hero() {
   return (
@@ -66,9 +61,9 @@ export function Hero() {
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <a href={quoteHref} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="h-4 w-4" /> Get Quote on WhatsApp
-              </a>
+              <Link href="/#contact">
+                <Phone className="h-4 w-4" /> Request a Quote
+              </Link>
             </Button>
           </div>
 

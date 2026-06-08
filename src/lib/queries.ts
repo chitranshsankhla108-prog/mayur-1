@@ -333,6 +333,32 @@ export async function getMyOrders(): Promise<Order[]> {
   }
 }
 
+/**
+ * Attach the joined customer profile to each order. orders.user_id and
+ * profiles.user_id both reference auth.users(id) (no direct FK between them),
+ * so we resolve the profiles in one batched query and merge in memory.
+ */
+async function attachCustomers(
+  supabase: ReturnType<typeof createClient>,
+  orders: Order[]
+): Promise<Order[]> {
+  const ids = Array.from(
+    new Set(orders.map((o) => o.user_id).filter(Boolean))
+  ) as string[];
+  if (ids.length === 0) return orders;
+  const { data: profiles } = await supabase
+    .from("profiles")
+    .select("*")
+    .in("user_id", ids);
+  const map = new Map(
+    ((profiles as Profile[]) ?? []).map((p) => [p.user_id, p])
+  );
+  return orders.map((o) => ({
+    ...o,
+    customer: o.user_id ? map.get(o.user_id) ?? null : null,
+  }));
+}
+
 export async function getAllOrders(): Promise<Order[]> {
   if (!hasEnv()) return [];
   try {
@@ -341,9 +367,37 @@ export async function getAllOrders(): Promise<Order[]> {
       .from("orders")
       .select("*, items:order_items(*)")
       .order("created_at", { ascending: false });
-    return (data as Order[]) ?? [];
+    const orders = (data as Order[]) ?? [];
+    return await attachCustomers(supabase, orders);
   } catch {
     return [];
+  }
+}
+
+/** Full order briefing for the admin detail page: order + items + customer. */
+export async function getOrderByIdAdmin(id: string): Promise<Order | null> {
+  if (!hasEnv()) return null;
+  try {
+    const supabase = createClient();
+    const { data } = await supabase
+      .from("orders")
+      .select("*, items:order_items(*)")
+      .eq("id", id)
+      .maybeSingle();
+    if (!data) return null;
+    const order = data as Order;
+    if (order.user_id) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("user_id", order.user_id)
+        .maybeSingle();
+      order.customer = (profile as Profile) ?? null;
+    }
+    order.items = (order.items ?? []).slice();
+    return order;
+  } catch {
+    return null;
   }
 }
 
@@ -358,5 +412,74 @@ export async function getAllCustomers(): Promise<Profile[]> {
     return (data as Profile[]) ?? [];
   } catch {
     return [];
+  }
+}
+
+export interface CustomerWithStats extends Profile {
+  order_count: number;
+  total_spent: number;
+  last_order_at: string | null;
+}
+
+/** Customers list enriched with per-customer order stats for the admin panel. */
+export async function getAllCustomersWithStats(): Promise<CustomerWithStats[]> {
+  if (!hasEnv()) return [];
+  try {
+    const supabase = createClient();
+    const [{ data: profiles }, { data: orders }] = await Promise.all([
+      supabase.from("profiles").select("*").order("created_at", { ascending: false }),
+      supabase.from("orders").select("user_id, total_amount, created_at"),
+    ]);
+
+    const stats = new Map<
+      string,
+      { count: number; spent: number; last: string | null }
+    >();
+    for (const o of (orders as
+      | { user_id: string | null; total_amount: number; created_at: string }[]
+      | null) ?? []) {
+      if (!o.user_id) continue;
+      const s = stats.get(o.user_id) ?? { count: 0, spent: 0, last: null };
+      s.count += 1;
+      s.spent += Number(o.total_amount) || 0;
+      if (!s.last || o.created_at > s.last) s.last = o.created_at;
+      stats.set(o.user_id, s);
+    }
+
+    return ((profiles as Profile[]) ?? []).map((p) => {
+      const s = stats.get(p.user_id);
+      return {
+        ...p,
+        order_count: s?.count ?? 0,
+        total_spent: s?.spent ?? 0,
+        last_order_at: s?.last ?? null,
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
+/** A single customer profile + their full order history (admin detail page). */
+export async function getCustomerByIdAdmin(
+  id: string
+): Promise<{ profile: Profile; orders: Order[] } | null> {
+  if (!hasEnv()) return null;
+  try {
+    const supabase = createClient();
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", id)
+      .maybeSingle();
+    if (!profile) return null;
+    const { data: orders } = await supabase
+      .from("orders")
+      .select("*, items:order_items(*)")
+      .eq("user_id", (profile as Profile).user_id)
+      .order("created_at", { ascending: false });
+    return { profile: profile as Profile, orders: (orders as Order[]) ?? [] };
+  } catch {
+    return null;
   }
 }

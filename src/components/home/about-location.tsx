@@ -1,7 +1,6 @@
 import {
   MapPin,
   Phone,
-  MessageCircle,
   Navigation,
   ShieldCheck,
   BadgeCheck,
@@ -10,7 +9,7 @@ import {
   Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SITE, WHATSAPP_NUMBER } from "@/lib/constants";
+import { SITE } from "@/lib/constants";
 
 const sells = [
   "Inverters",
@@ -37,9 +36,6 @@ export function AboutLocation() {
     )}`;
   const phone = process.env.NEXT_PUBLIC_BUSINESS_PHONE || SITE.phone;
   const phoneHref = `tel:${phone.replace(/\s+/g, "")}`;
-  const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-    "Hello Mayur Electronics, I'd like to know more about your products."
-  )}`;
 
   return (
     <section id="about" className="container-px scroll-mt-24 py-16 lg:py-20">
@@ -99,11 +95,6 @@ export function AboutLocation() {
             <Button asChild size="lg" variant="outline">
               <a href={phoneHref}>
                 <Phone className="h-4 w-4" /> Call Now
-              </a>
-            </Button>
-            <Button asChild size="lg" variant="outline">
-              <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="h-4 w-4" /> WhatsApp Us
               </a>
             </Button>
           </div>

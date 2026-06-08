@@ -20,7 +20,7 @@ const trust = [
   { icon: ShieldCheck, title: "Genuine & Warranty", desc: "100% authentic, brand-backed" },
   { icon: Tag, title: "Best Prices", desc: "Fair & transparent" },
   { icon: Truck, title: "Fast Delivery", desc: "Across the region" },
-  { icon: Headphones, title: "Dedicated Support", desc: "Real humans on WhatsApp" },
+  { icon: Headphones, title: "Dedicated Support", desc: "Real humans, real help" },
 ];
 
 const brands = ["Luminous", "Exide", "Hikvision", "CP Plus", "Amaron", "Microtek", "Su-Kam", "Waaree"];
@@ -59,9 +59,24 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Best sellers */}
+      {/* Shop by category (compact) — categories lead the shopping flow */}
+      <section className="container-px py-16 lg:py-20">
+        <SectionHeading
+          eyebrow="Shop by category"
+          title="Browse by category"
+          subtitle="Find exactly what you need, faster."
+          href="/products"
+        />
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {categories.slice(0, 6).map((c) => (
+            <CategoryCard key={c.id} category={c} />
+          ))}
+        </div>
+      </section>
+
+      {/* Best sellers — shown below categories */}
       {bestSellers.length > 0 && (
-        <section className="container-px py-16 lg:py-20">
+        <section className="container-px border-t border-border py-16 lg:py-20">
           <SectionHeading
             eyebrow="Best sellers"
             title="Best Sellers"
@@ -75,21 +90,6 @@ export default async function HomePage() {
           </div>
         </section>
       )}
-
-      {/* Shop by category (compact) */}
-      <section className="container-px border-t border-border py-16 lg:py-20">
-        <SectionHeading
-          eyebrow="Shop by category"
-          title="Browse by category"
-          subtitle="Find exactly what you need, faster."
-          href="/products"
-        />
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {categories.slice(0, 6).map((c) => (
-            <CategoryCard key={c.id} category={c} />
-          ))}
-        </div>
-      </section>
 
       {/* Explore all products */}
       <section className="container-px border-t border-border py-16 lg:py-20">
